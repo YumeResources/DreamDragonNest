@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>User Guide's</title>
+    <style>
+        .card:hover {
+            box-shadow: 0px 0px 10px 4px rgba(33, 95, 209, 0.295);
+            transition: 0.2s;
+        }
+        .card {
+            transition: 0.4s;
+        }
+        .container:hover {
+            box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body onload="serverTime();setInterval(() => {
+    serverTime(); 
+}, 1000);goAway(); ">
+    <div class="jumbotron pb-0 pt-3 mb-1">
+        <h1 class="display-4">Hello, Dreamer!</h1>
+        <p class="lead">We created this landing page to help those of you who are having problems and we hope to help you.</p>
+        
+        <hr class="my-3">
+        <p class="pb-0 text-fantasy text-secondary" id="time"></p>
+    </div>
+
+    <!-- Contents -->
+    <div class="container-fluid mb-5" id="mainMenu">
+        <small class="text-danger">Please allow pop ups on this website!</small>
+        <div class="row" id="rowDataDisplayed"></div>
+        
+    </div>
+    
+    <div class="container-fluid" id="displaySolveProblem"></div>
+    <div class="footer"><small style="position: fixed; bottom: 0px;right: 0px;">Develop by Yume</small></div>
+    <script>
+        const prefix = "problem";
+            const queryString = window.location.search;
+            const urlGetParam = new URLSearchParams(queryString);
+            
+            function loadData() {
+                const problems = [
+                    {
+                        // Problem 1
+                        id: 1,
+                        pageId: 1,
+                        title: "DragonNest.exe - System Error",
+                        subTitle: "aslijowo.dll",
+                        description: "The code execution cannot procced because <b>aslijowo.dll</b> was not found. Reinstalling the program may fix this problem.",
+                        link: "user_guide.html?problem=1"
+                    },
+                    {
+                        // Problem 2
+                        id: 2,
+                        pageId: 2,
+                        title: "DragonNest.exe - System Error",
+                        subTitle: "codec_TSC32.dll",
+                        description: "The code execution cannot procced because <b>codec_TSC32.dll</b> was not found. Reinstalling the program may fix this problem.",
+                        link: "user_guide.html?problem=2"
+                    },
+                    {
+                        // Problem 3
+                        id: 3,
+                        pageId: 3,
+                        title: "Unable to connect to the login server",
+                        subTitle: "Trying to login but can't",
+                        description: "Usually the server is under maintenance, check the server maintenance notification in the <a href='#'>Discord</a>",
+                        link: "user_guide.html?problem=3"
+                    },
+                    {
+                        // Problem 4
+                        id: 4,
+                        pageId: 'none',
+                        title: "Invalid ID after Register",
+                        subTitle: "",
+                        description: "Please verify your account by chating with <a href='#'>@Apew</a>",
+                        link: "user_guide.html?problem=no-page"
+                    },
+                    {
+                        // Problem 5
+                        id: 5,
+                        pageId: 'none',
+                        title: "Still Error after Verif ID",
+                        subTitle: "",
+                        description: "Change your account password on the website and don't enter <b>Capslock</b> in the password form, and after changing the password please chat to <a href='#'>@Apew</a>",
+                        link: "user_guide.html?problem=no-page"
+                    },
+                    {
+                        // Problem 6
+                        id: 6,
+                        pageId: 'none',
+                        title: "Minus FTG",
+                        subTitle: "",
+                        description: "Send your nickname to <a href='#'>@Apew</a>",
+                        link: "user_guide.html?problem=no-page"
+                    },
+                    {
+                        // Problem 7
+                        id: 7,
+                        pageId: 'none',
+                        title: "vcruntime.dll Missing",
+                        subTitle: "vcruntime.dll",
+                        description: "The code execution cannot procced because <b>vcruntime.dll</b> was not found. Reinstalling the program may fix this problem.",
+                        link: "user_guide.html?problem=4"
+                    },
+                    {
+                        // Problem 8
+                        id: 8,
+                        pageId: 'none',
+                        title: "0xc0000906",
+                        subTitle: "",
+                        description: "The application was unable to start correctly(<b>0xc0000906</b>).Click OK to close the application.",
+                        link: "user_guide.html?problem=5"
+                    },
+
+                ]
+                // Solve data
+                const solve = [
+                    {
+                        id: 1,
+                        title: "aslijowo.dll was not found",
+                        description: '',
+                        image: `https://lh3.googleusercontent.com/3wGUq6glMOYQ9EIIxbfovAP5SgLH4jKdqTFwHfiF-cdAAh-otKnkemkUnMH3UkUH8ZstUvZgNaAAIuJqGDNN6bF9r_NTqUwrNY4kVCc6LEIjKpHNrAmmcE_yhenGVXV2LfsGG8JpDwQ4VFE76HOaXhwA0Ehc3f8vXAWQy_ILP5MjNGkgz7mDQ68RVxwuGfKS2oN4FT9QZAdySaTLRH-HuwW_XW8VLSEmtUHB4_A3PBr68OWtGNbMGAQbRNuJOjn7YyZmY3rotTzauJi3ADKenalVm3P4Bsw6UvxL8OYA_jFsXJqfKSukazsEB1__CgGvogxTcpvZjQP1yCrRhHveYvs50iCvzSYS3YmjnRqasT7URxf_6OcO8Euzo4XXD8-SRpDXwfzzV674RsKdD5rMuVJrgO3fJ_Cjvo_Gk_lvsx_VYLX-fib_y1S-cdhGpYCeKd1eX-9ydCcd2CueTf7SPskjdcPqnPq_zUdwBFXBoZ99n5WRBpf6IDw5yNjmbc9dvuWHMFIoIgv1H6v718RuIlzmh-QCAjU5R51LeOwS9U3NYaf_OrmPOezFbwicwCWk8H1S45dufulEnEcAYTGNIyb8mNZo9B8k0jefPJHeSrtXDw0DDAhZWsuPT33kQci2n8D_m7_AetXeDcrO1Z8Gx7_zt2tiA-Ed3S9g4QDhlCVFao4OZDtJ1KiBG2_Y-i5baf3M7gMEDxTgjGAHrg-ikA=w413-h152-no?authuser=1`,
+                        altImage: 'missing_aslijowo.dll',
+                        howToFix: `<li>Download this <a
+                    href="https://drive.google.com/file/d/1qrSlXCiKnsrLbPL-2CUsvOfNTehuf93a/view?usp=sharing">aslijowo.dll</a>.
+            </li>
+            <li>Paste it into your DreamDN folder.</li>
+            <li><b>Done</b></li>`
+                    },
+                    {
+                        id: 2,
+                        title: "codec_TSC32.dll was not found",
+                        description: '',
+                        image: `https://lh3.googleusercontent.com/Y2fdEm-5ORw7hIK_mwx2dIGV0_0VBnHN3jZSqzmGfJ-3bAq3SqckrBFKBfaQkQahNC151hSi1pPUGrRDj82iKv5J4DPt_vQS1iRKngucVj3PdX6E1xTfEaHb7nVWzTrbQS2nf6xAw5TlvcxQqXmIqlGWWTECE-R_EarA9QNlYtEJOx9yu5n7fyIg7rMwAMTSVKMWoLkXURNKY7Piwf0ILO7vgNQTGfpPChXoTagLVHhtFOKbbejD0v9F_jibZ6kD697ckdk-tfaAqjYu1n08plArF8vystoBXSGzy1XJW1rvDJPV6q7NHwmiQgpClyHwSzBdjGA26Zt0PDX1Fx-1f3WqW8kml1WghxHPhODETCAkSOf2kX3Kck54698J2wCWWv4ZXisS14QtjwgF7Ak4gXiSB3PKI71yxX36o4z7DuD_gRtEbrYVPukaAwtD30aPSi-u_UyMU2sWPhJ4pNIQJDPMg8ehg8h9uxl0JE1qovVKV91Fqa4Oc8qQ789xMEON72rYZI0otvjTVXcCLbi3qLDwcq4F7h0FIMd3JjSiPwkPcbYHdvoVCQtG3qFND7lttlXGw0sx--HF-jAcuAjXkjvxK1wA4DComnV8yf6wY7vwXjEF6dDIZjyaAyeL3KEoVGAIjkiwCwULyaj_8DRlFzoMtYwEAlOF07qfsNMHsQ2iW6e4UdlEMBkgRjOSFVUEm3nr42Coz5vqmEyNntaPxE9W_gkr11HFm0s84G_BbFSDcNXWQRF-r_e-619B4Idig6uvE2RtajRbmIY=w412-h152-no?authuser=0`,
+                        altImage: 'codec_TSC32.dll',
+                        howToFix: `<li>Download this <a
+                    href="https://drive.google.com/file/d/1w71upChIWgZ9qhILK5d-VD44VqTYPxfH/view?usp=sharing">codec_TSC32.dll</a>.
+            </li>
+            <li>Paste it into your DreamDN folder.</li>
+            <li><b>Done</b></li>`
+                    },
+                    {
+                        id: 3,
+                        title: "Unable to connect to the login server.",
+                        description: '',
+                        image: `https://lh3.googleusercontent.com/pw/AM-JKLV0t1LRn-PKlZEytV0lOhLnHuqa0XqSlBuOXJ6-nUJToSOxN08LxaBw3HbMtvD82CHA6cuuFkTiCqVSU_Vi1soHiL_N0yVm9ioaguTVvgDBQkhMwvVTyrW0zSIk80SyKS3GgHOnqGuadrriQGgxixU=w366-h139-no?authuser=1`,
+                        altImage: '',
+                        howToFix: `
+            <li>Download this <a href="https://cdn.discordapp.com/attachments/867253775236595762/928543215852867634/New_File_Fix_All_Problem.rar">New_File_Fix_All_Problem.rar</a>.
+            </li>
+            <li>Paste it into your DreamDN folder.</li>
+            <li>Extract</li>
+            <li><b>Done</b></li>`
+                    },
+                    {
+                        id: 4,
+                        title: "vcruntime.dll Missing",
+                        description: '',
+                        image: ``,
+                        altImage: 'vcruntime.dll',
+                        howToFix: `
+            <li>Download this <a href="https://cdn.discordapp.com/attachments/867253775236595762/913240448129175562/Visual_C_Full.rar">Visual C++ Redistributable</a>.
+            </li>
+            <li>Paste it into your DreamDN folder.</li>
+            <li><b>Done</b></li>`
+                    },
+                    {
+                        id: 5,
+                        title: "0xc0000906",
+                        description: 'The application was unable to start correctly(0xc0000906).Click OK to close the application.',
+                        image: `https://lh3.googleusercontent.com/J_dah2ql9dkkWiO9N4x6uxcyYv8du1IoT5XlS7obIIVPPUes6jLcKbQmlEmibK0YGyWHLPgE7TgrhBP3okVnPTN1I__6ZwHhY6kn8OtyWSbdZEBYbOCFQW-reXbdAGrVPcjCjupZcQRfN8TkwO1HJDpQjkDYrfmN35Mbm5B3HD4csZ9-YbE1fqPW6ESMSU9GXorQ3zWl6jJSa-PJ5op9Aazx_xJaYB53irh9qdwimmXaVxwhpiiUpx6BTclBbxj9ATU26fdYoc4S7TGOIB4b6ZqjGtKUJpD_S__OGkliPNLXJhNibUQXrJN10qVqTMtGTsc7fAeBCr6bUFnroCvoIbmwNVz94ANSe2xDZIUGttjGOvPaM0fEa-eUdGcMVniSGkroBR6u96HojrRCtAOMBuoEbVIDQD3F3NYr75CyqkJ8BaTv9cDGumjUxQSiFKvQ6GVhcsLP9sjsE_nnNh-0oc5a5rDtlAcfg1Bi-Vkgf5IUCluCyQB9J-2Kx_AARHmYeujIs-GyZOKOQhuNuP3EM8qKlg92QejgUW87Oa-NCfHw0S_oR2iJcu-LxP0n12nakhtUzpAB9YY-ktH6HvzgVxF1fQwJkWoTR-1ENwzHzYNI2HzU2x_x4cPNwUtQUdqIip91c3l40CvIplw3YjgjPhPhpDtjKr4Ny-g-hk9hh1kojiJV2dm9l1JVmz6LfutJVTWtoyOSTou9wb9Nztd-wKg=w423-h155-no?authuser=1`,
+                        altImage: '0xc0000906',
+                        howToFix: `
+            <li>Exclusion folder Dragon Nest to your window defender / turn off your Windows Defender.</li>
+            <li>Re-Extract DreamDN rar file.</li>
+            <li><b>Done</b>.</li>`
+                    },
+
+                ]
+                // Looping for Problems
+                for (let i = 0; i < problems.length; i++) {
+                    let component = ''
+                    let link = ''
+                    let cursorTitle = ''
+                    if (problems[i].subTitle.length > 0) {
+                        component = `<h6 class="card-title">${problems[i].subTitle}</h6>`;
+                    }
+                    var see = problems[i].link.split('user_guide.html?problem=').at(-1)
+                    //  alert(see)
+                    if (see !== "no-page") {
+                        link = `onclick="window.open('${problems[i].link}')"`;
+                        cursorTitle = 'Click to open';
+                    }
+                    document.getElementById('rowDataDisplayed').innerHTML += `
+            <div class="col-md-4 mt-3" >
+                <div class="card" style='height:100%;cursor:pointer' title='${cursorTitle}' ${link} >
+                    <h5 class="card-header"> ${problems[i].title}</h5>
+                    <div class="card-body">
+                        ${component}
+                        <p class="card-text">${problems[i].description}</p>
+                        
+                    </div>
+                    
+                </div>
+            </div>`;
+                }
+                //  Looping for Solve
+                for (let i = 0; i < solve.length; i++) {
+                    document.getElementById('displaySolveProblem').innerHTML += `<div class="container-fluid" id="p${solve[i].id}"><button class="btn-warning" onclick="window.close()">< Back</button>
+        <h3>${solve[i].title}</h3>
+        <p>${solve[i].description}</p>
+        <img src="${solve[i].image}"
+            alt="${solve[i].altImage}.jpg" />
+        <br>
+        <br>
+        <h4>How To Fix</h4>
+        <ul>
+           ${solve[i].howToFix}
+        </ul>
+    </div>`;
+                }
+            }
+            loadData()
+            function goAway() {
+
+                if (urlGetParam.get(prefix)) {
+                    const param = urlGetParam.get(prefix);
+                    if (!isNaN(param)) {
+                        switch (parseInt(param)) {
+                            case 1:
+                                mainMenu.style.display = "none";
+                                p1.style.display = "block";
+                                p2.style.display = "none";
+                                p3.style.display = "none";
+                                p4.style.display = "none";
+                                p5.style.display = "none";
+                                break;
+                            case 2:
+                                mainMenu.style.display = "none";
+                                p1.style.display = "none";
+                                p2.style.display = "block";
+                                p3.style.display = "none";
+                                p4.style.display = "none";
+                                p5.style.display = "none";
+                                break;
+                            case 3:
+                                mainMenu.style.display = "none";
+                                p1.style.display = "none";
+                                p2.style.display = "none";
+                                p3.style.display = "block";
+                                p4.style.display = "none";
+                                p5.style.display = "none";
+                                break;
+                            case 4:
+                                mainMenu.style.display = "none";
+                                p1.style.display = "none";
+                                p2.style.display = "none";
+                                p3.style.display = "none";
+                                p4.style.display = "block";
+                                p5.style.display = "none";
+                                break;
+                            case 5:
+                                mainMenu.style.display = "none";
+                                p1.style.display = "none";
+                                p2.style.display = "none";
+                                p3.style.display = "none";
+                                p4.style.display = "none";
+                                p5.style.display = "block";
+                                break;
+                            default:
+                                mainMenu.style.display = "block";
+                                p1.style.display = "none";
+                                p2.style.display = "none";
+                                p3.style.display = "none";
+                                p4.style.display = "none";
+                                p5.style.display = "none";
+                                break;
+                        }
+                    } else {
+                        mainMenu.style.display = "block";
+                        p1.style.display = "none";
+                        p2.style.display = "none";
+                        p3.style.display = "none";
+                        p4.style.display = "none";
+                        p5.style.display = "none";
+                    }
+                } else {
+                    mainMenu.style.display = "block";
+                    p1.style.display = "none";
+                    p2.style.display = "none";
+                    p3.style.display = "none";
+                    p4.style.display = "none";
+                    p5.style.display = "none";
+                }
+            }
+            function convertTZ(date, tzString) {
+                return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {
+                    timeZone: tzString
+                }));
+            }
+
+            function serverTime() {
+
+                const dateInitServer = new Date();
+                convertTZ(dateInitServer, "Asia/Jakarta") // current date-time in jakarta.
+
+                const daysArray = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+                const monthsArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                let days = daysArray[dateInitServer.getDay() - 1];
+                let date = dateInitServer.getDate();
+                let months = monthsArray[dateInitServer.getMonth()]
+                let years = dateInitServer.getFullYear()
+
+                let hour = dateInitServer.getHours()
+                let minute = dateInitServer.getMinutes()
+                let second = dateInitServer.getSeconds()
+
+                document.getElementById('time').innerHTML = `Server: ${days}, ${date}-${months}-${years}, ${hour}:${minute}:${second}`
+            }
+
+
+        
+    </script>
+</body>
+</html>
